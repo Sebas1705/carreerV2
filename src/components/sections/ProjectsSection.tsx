@@ -31,60 +31,49 @@ const ExternalIcon = () => (
 
 export default function ProjectsSection() {
   const { t } = useTranslation()
-  const workProjects = t('projects.work', { returnObjects: true }) as Project[]
+  const workProjects     = t('projects.work',     { returnObjects: true }) as Project[]
   const featuredProjects = t('projects.featured', { returnObjects: true }) as Project[]
-  const [tab, setTab] = useState<Tab>('work')
+  const [tab, setTab]         = useState<Tab>('work')
   const [expanded, setExpanded] = useState<string | null>(null)
 
   const projects = tab === 'work' ? workProjects : featuredProjects
 
-  const switchTab = (next: Tab) => {
-    setTab(next)
-    setExpanded(null)
-  }
+  const switchTab = (next: Tab) => { setTab(next); setExpanded(null) }
 
   return (
-    <section className="h-full w-full flex items-center justify-center px-8">
-      <div className="max-w-5xl w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-6"
-        >
-          <p className="font-mono text-xs tracking-[0.25em] uppercase text-violet-600 dark:text-violet-400 mb-2">
+    <section className="h-full w-full flex items-center justify-center px-10">
+      <div className="max-w-6xl w-full">
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6">
+          <p className="font-mono text-xs tracking-[0.25em] uppercase text-violet-600 dark:text-violet-400 mb-3">
             {t('nav.projects')}
           </p>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-5xl sm:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t('projects.title')}
           </h2>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex gap-2 justify-center mb-6"
-        >
+        {/* Tabs */}
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 justify-center mb-6">
           {(['work', 'featured'] as Tab[]).map(t2 => (
             <button
               key={t2}
               onClick={() => switchTab(t2)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
+              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
                 tab === t2
                   ? 'bg-violet-600 text-white shadow-md shadow-violet-500/25'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               {t(`projects.filter_${t2}`)}
-              <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
-                tab === t2 ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
-              }`}>
+              <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${tab === t2 ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
                 {t2 === 'work' ? workProjects.length : featuredProjects.length}
               </span>
             </button>
           ))}
         </motion.div>
 
+        {/* Cards */}
         <AnimatePresence mode="wait">
           <motion.div
             key={tab}
@@ -96,7 +85,7 @@ export default function ProjectsSection() {
           >
             {projects.map((project, i) => {
               const isExpanded = expanded === project.id
-              const hasLinks = project.github || project.demo
+              const hasLinks   = project.github || project.demo
               return (
                 <motion.div
                   key={project.id}
@@ -129,25 +118,13 @@ export default function ProjectsSection() {
 
                   <AnimatePresence initial={false} mode="wait">
                     {isExpanded ? (
-                      <motion.p
-                        key="long"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.18 }}
-                        className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed flex-1 mb-3"
-                      >
+                      <motion.p key="long" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}
+                        className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed flex-1 mb-3">
                         {project.long_desc}
                       </motion.p>
                     ) : (
-                      <motion.p
-                        key="short"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3 flex-1 mb-3"
-                      >
+                      <motion.p key="short" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
+                        className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3 flex-1 mb-3">
                         {project.desc}
                       </motion.p>
                     )}
@@ -155,10 +132,7 @@ export default function ProjectsSection() {
 
                   <div className="flex flex-wrap gap-1 mb-3">
                     {project.tags.slice(0, isExpanded ? undefined : 4).map(tag => (
-                      <span
-                        key={tag}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium"
-                      >
+                      <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
                         {tag}
                       </span>
                     ))}
@@ -172,25 +146,15 @@ export default function ProjectsSection() {
                   {hasLinks && (
                     <div className="flex items-center gap-3 mt-auto" onClick={e => e.stopPropagation()}>
                       {project.github && (
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
-                        >
-                          <GitHubIcon />
-                          {t('projects.view_code')}
+                        <a href={project.github} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                          <GitHubIcon />{t('projects.view_code')}
                         </a>
                       )}
                       {project.demo && (
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
-                        >
-                          <ExternalIcon />
-                          {t('projects.view_demo')}
+                        <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                          <ExternalIcon />{t('projects.view_demo')}
                         </a>
                       )}
                     </div>
@@ -201,12 +165,8 @@ export default function ProjectsSection() {
           </motion.div>
         </AnimatePresence>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-center text-[11px] text-slate-400 dark:text-slate-600 mt-4"
-        >
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+          className="text-center text-[11px] text-slate-400 dark:text-slate-600 mt-4">
           {t('projects.click_hint', 'Click a card to read more')}
         </motion.p>
       </div>

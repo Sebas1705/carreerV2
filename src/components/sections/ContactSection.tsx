@@ -23,90 +23,69 @@ export default function ContactSection() {
   const { t } = useTranslation()
 
   return (
-    <section className="h-full w-full flex items-center justify-center px-8">
+    <section className="h-full w-full flex items-center justify-center px-10">
       <div className="max-w-2xl w-full text-center">
+
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as const }}
-          className="text-5xl mb-6"
+          className="text-6xl mb-7"
         >
           👋
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-3"
-        >
-          <p className="font-mono text-xs tracking-[0.25em] uppercase text-violet-600 dark:text-violet-400 mb-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4">
+          <p className="font-mono text-xs tracking-[0.25em] uppercase text-violet-600 dark:text-violet-400 mb-4">
             {t('nav.contact')}
           </p>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-5xl sm:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t('contact.title')}
           </h2>
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-slate-500 dark:text-slate-400 mb-10 max-w-sm mx-auto"
-        >
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+          className="text-slate-500 dark:text-slate-400 mb-10 max-w-sm mx-auto text-base leading-relaxed">
           {t('contact.subtitle')}
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex flex-wrap gap-3 justify-center mb-10"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+          className="flex flex-wrap gap-3 justify-center mb-10">
           <a
             href="mailto:sebssgarcia502580@gmail.com"
-            className="px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-full font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-violet-500/30"
+            className="px-7 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-full font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-violet-500/30 text-sm"
           >
             {t('contact.email_cta')}
           </a>
           <a
             href="https://github.com/Sebas1705"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-3 border border-slate-200 dark:border-slate-700 rounded-full font-semibold hover:border-violet-400 dark:hover:border-violet-500 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-105"
+            target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 px-7 py-3 border border-slate-200 dark:border-slate-700 rounded-full font-semibold hover:border-violet-400 dark:hover:border-violet-500 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-105 text-sm"
           >
-            <GitHubIcon />
-            GitHub
+            <GitHubIcon />GitHub
           </a>
           <a
-            href="https://www.linkedin.com/in/sebasti%C3%A1n-ramiro-entrerrios-garc%C3%ADa-b1a713217/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-3 border border-slate-200 dark:border-slate-700 rounded-full font-semibold hover:border-violet-400 dark:hover:border-violet-500 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-105"
+            href="https://www.linkedin.com/in/sebastián-ramiro-entrerrios-garcía-b1a713217/"
+            target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 px-7 py-3 border border-slate-200 dark:border-slate-700 rounded-full font-semibold hover:border-violet-400 dark:hover:border-violet-500 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-105 text-sm"
           >
-            <LinkedInIcon />
-            LinkedIn
+            <LinkedInIcon />LinkedIn
           </a>
           <a
             href="https://www.codewars.com/users/Sebas1705"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-3 border border-slate-200 dark:border-slate-700 rounded-full font-semibold hover:border-violet-400 dark:hover:border-violet-500 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-105"
+            target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 px-7 py-3 border border-slate-200 dark:border-slate-700 rounded-full font-semibold hover:border-violet-400 dark:hover:border-violet-500 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-105 text-sm"
           >
-            <CodewarsIcon />
-            Codewars
+            <CodewarsIcon />Codewars
           </a>
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-sm text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1.5"
-        >
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+          className="text-sm text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1.5">
           <span>📍</span>
           {t('contact.location')}
         </motion.p>
+
       </div>
     </section>
   )
