@@ -1,0 +1,34 @@
+{
+  "projects": {
+    "title": "Proyectos",
+    "view_code": "Ver código",
+    "context_academic": "Académico",
+    "context_personal": "Personal",
+    "items": [
+      {
+        "name": "Orquestador VPS Local",
+        "context": "academic",
+        "desc": "Orquestador de recursos local para sistemas VPS con Linux. Gestiona recursos simples, métricas y pipelines de automatización avanzados para infraestructura propia.",
+        "long_desc": "Diseñado y construido como parte del Máster en Desarrollo con IA. Proporciona una interfaz unificada para monitorear CPU, memoria y disco, programar tareas automatizadas y reiniciar servicios — todo desde una herramienta CLI.",
+        "tags": ["Linux", "Bash", "DevOps", "Automatización", "VPS", "Shell Scripting"],
+        "github": "https://github.com/Sebas1705/VPSLocalOrchestrator"
+      },
+      {
+        "name": "YouKnow",
+        "context": "academic",
+        "desc": "App móvil de red social para chatear, agruparse y jugar juegos educativos con mecánicas de gamificación, construida con Kotlin y Jetpack Compose.",
+        "long_desc": "Proyecto final de grado. App Android completa con Firebase Firestore en tiempo real, Firebase Auth y Firebase Storage. Los usuarios crean grupos de estudio, se desafían a cuestionarios, ganan puntos XP y escalan clasificaciones.",
+        "tags": ["Kotlin", "Jetpack Compose", "Firebase", "Android", "MVVM", "Coroutines"],
+        "github": "https://github.com/Sebas1705/YouKnow"
+      },
+      {
+        "name": "Katas de Codewars",
+        "context": "personal",
+        "desc": "Repositorio con soluciones a katas de Codewars en múltiples lenguajes, abordando desafíos algorítmicos y de estructuras de datos complejos.",
+        "long_desc": "Repositorio personal en curso enfocado en afilar el pensamiento algorítmico. Las soluciones cubren ordenación, programación dinámica, recorrido de grafos, manipulación de cadenas y más, escritas en Kotlin y C#.",
+        "tags": ["Algoritmos", "Kotlin", "C#", "Estructuras de datos", "Resolución de problemas"],
+        "github": "https://github.com/Sebas1705/Codewars"
+      }
+    ]
+  }
+}

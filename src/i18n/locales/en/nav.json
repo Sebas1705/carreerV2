@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "hero": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "experience": "Experience",
+    "projects": "Projects",
+    "education": "Education",
+    "contact": "Contact"
+  }
+}

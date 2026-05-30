@@ -1,0 +1,52 @@
+{
+  "education": {
+    "title": "Education",
+    "certifications": "Certifications",
+    "items": [
+      {
+        "degree": "Master's in AI Development",
+        "school": "BigSchool & Isabel I University",
+        "period": "Oct 2025 – Present",
+        "detail": "Advanced postgraduate program focused on professional specialization in artificial intelligence and machine learning. Online, Spain.",
+        "icon": "🎓"
+      },
+      {
+        "degree": "Bachelor's in Computer Engineering",
+        "school": "Rey Juan Carlos University",
+        "period": "Sept 2020 – June 2025",
+        "detail": "Móstoles, Madrid, Spain.",
+        "icon": "🎓"
+      },
+      {
+        "degree": "Baccalaureate – Technology",
+        "school": "IES Maestro Matías Bravo",
+        "period": "Sept 2018 – June 2020",
+        "detail": "Valdemoro, Madrid, Spain.",
+        "icon": "📚"
+      }
+    ],
+    "certs": [
+      {
+        "name": "Jetpack Compose: Definitive Course",
+        "issuer": "AppCademy",
+        "date": "Dec 2025",
+        "desc": "Building native interfaces with Jetpack Compose and modern patterns.",
+        "url": "https://www.appcademy.dev/certificates/cert_JGzFpajl"
+      },
+      {
+        "name": "Firebase for Android with Kotlin",
+        "issuer": "AppCademy",
+        "date": "Dec 2025",
+        "desc": "Firebase integration with Android/Kotlin: auth, database and deployment.",
+        "url": "https://www.appcademy.dev/certificates/cert_ZKrT1jVn"
+      },
+      {
+        "name": "Master Android with Kotlin, Compose & Gemini AI",
+        "issuer": "Udemy",
+        "date": "Aug 2025",
+        "desc": "Advanced Android with Kotlin, Jetpack Compose and Gemini AI for modern apps.",
+        "url": "https://www.udemy.com/certificate/UC-71fadc11-b2f1-4176-a7d4-a8bd2c316471/"
+      }
+    ]
+  }
+}

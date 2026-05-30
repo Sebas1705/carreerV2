@@ -1,0 +1,34 @@
+{
+  "projects": {
+    "title": "Projects",
+    "view_code": "View code",
+    "context_academic": "Academic",
+    "context_personal": "Personal",
+    "items": [
+      {
+        "name": "Local VPS Orchestrator",
+        "context": "academic",
+        "desc": "Local resource orchestrator for VPS systems running Linux. Manages simple resources and metrics as well as advanced automation pipelines for self-hosted infrastructure.",
+        "long_desc": "Designed and built as part of the AI Development Master's program. Provides a unified interface to monitor CPU, memory and disk usage, schedule automated tasks via cron, and restart services — all from a single CLI tool.",
+        "tags": ["Linux", "Bash", "DevOps", "Automation", "VPS", "Shell Scripting"],
+        "github": "https://github.com/Sebas1705/VPSLocalOrchestrator"
+      },
+      {
+        "name": "YouKnow",
+        "context": "academic",
+        "desc": "Mobile social network app for chatting, grouping and playing educational games with gamification mechanics built with Kotlin and Jetpack Compose.",
+        "long_desc": "Bachelor's degree final project. A full-featured Android app integrating real-time Firebase Firestore, Firebase Auth and Firebase Storage. Users can create study groups, challenge friends to quizzes, earn XP points and climb leaderboards.",
+        "tags": ["Kotlin", "Jetpack Compose", "Firebase", "Android", "MVVM", "Coroutines"],
+        "github": "https://github.com/Sebas1705/YouKnow"
+      },
+      {
+        "name": "Codewars Katas",
+        "context": "personal",
+        "desc": "Repository with solutions to Codewars katas in multiple programming languages, tackling complex algorithmic and data-structure challenges.",
+        "long_desc": "Ongoing personal kata repository focused on sharpening algorithmic thinking. Solutions cover sorting, dynamic programming, graph traversal, string manipulation and more, written in Kotlin and C#.",
+        "tags": ["Algorithms", "Kotlin", "C#", "Data Structures", "Problem Solving"],
+        "github": "https://github.com/Sebas1705/Codewars"
+      }
+    ]
+  }
+}

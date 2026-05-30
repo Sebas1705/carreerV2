@@ -1,0 +1,25 @@
+{
+  "skills": {
+    "title": "Skills",
+    "technical": "Technical",
+    "soft": "Soft Skills",
+    "languages": "Languages & Frameworks",
+    "tools": "Tools & Platforms",
+    "techList": ["Kotlin", "C#", "HTML", "Bash"],
+    "toolsList": ["Git", "Gradle", "Android Studio", "Jetpack Compose", "VS Code", "GitHub Copilot", "Windows"],
+    "softList": [
+      "Teamwork",
+      "Communication",
+      "Problem Solving",
+      "Adaptability",
+      "Proactivity",
+      "Time Management",
+      "Critical Thinking",
+      "Continuous Learning",
+      "Attention to Detail",
+      "Creativity",
+      "Empathy",
+      "Resilience"
+    ]
+  }
+}

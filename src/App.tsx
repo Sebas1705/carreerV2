@@ -4,6 +4,7 @@ import { useTheme } from './hooks/useTheme'
 import { useSection } from './hooks/useSection'
 import NavDots from './components/layout/NavDots'
 import Controls from './components/layout/Controls'
+import Background from './components/layout/Background'
 import HeroSection from './components/sections/HeroSection'
 import AboutSection from './components/sections/AboutSection'
 import SkillsSection from './components/sections/SkillsSection'
@@ -40,6 +41,7 @@ export default function App() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+      <Background />
       <Controls theme={theme} onToggleTheme={toggleTheme} onToggleLang={toggleLang} lang={i18n.language} />
       <NavDots total={SECTIONS.length} current={current} onNavigate={navigate} sectionKeys={SECTION_KEYS} />
 

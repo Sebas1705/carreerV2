@@ -1,0 +1,23 @@
+{
+  "experience": {
+    "title": "Experience",
+    "jobs": [
+      {
+        "role": "Junior Full Stack & Mobile Developer",
+        "company": "Solusoft",
+        "period": "March 2025 – Present",
+        "type": "Hybrid",
+        "desc": "Development and maintenance of full stack and mobile applications. Participation in implementing new features and continuous improvement of existing applications.",
+        "projects": ["AGEDI system", "Sisley frontend/backend", "Iberext mobile app", "EPDM music portal"]
+      },
+      {
+        "role": "Full Stack & Mobile Developer Intern",
+        "company": "Solusoft",
+        "period": "October 2024 – February 2025",
+        "type": "Hybrid",
+        "desc": "Development and maintenance of full stack and mobile applications. Participation in implementing new features and continuous improvement of existing applications.",
+        "projects": ["AGEDI system", "Sisley frontend/backend", "Iberext mobile app", "EPDM music portal"]
+      }
+    ]
+  }
+}
