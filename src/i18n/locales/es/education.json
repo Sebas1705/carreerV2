@@ -2,6 +2,8 @@
   "education": {
     "title": "Formación",
     "certifications": "Certificaciones",
+    "show_more": "+{{count}} más",
+    "show_less": "Mostrar menos",
     "items": [
       {
         "degree": "Máster en Desarrollo con IA",

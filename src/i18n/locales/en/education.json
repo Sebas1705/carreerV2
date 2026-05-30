@@ -2,6 +2,8 @@
   "education": {
     "title": "Education",
     "certifications": "Certifications",
+    "show_more": "+{{count}} more",
+    "show_less": "Show less",
     "items": [
       {
         "degree": "Master's in AI Development",
