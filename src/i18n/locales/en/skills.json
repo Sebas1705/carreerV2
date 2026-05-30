@@ -1,12 +1,15 @@
 {
   "skills": {
     "title": "Skills",
-    "technical": "Technical",
     "soft": "Soft Skills",
-    "languages": "Languages & Frameworks",
-    "tools": "Tools & Platforms",
-    "techList": ["Kotlin", "C#", "HTML", "Bash"],
-    "toolsList": ["Git", "Gradle", "Android Studio", "Jetpack Compose", "VS Code", "GitHub Copilot", "Windows"],
+    "languages": "Languages",
+    "frameworks": "Frameworks & Platforms",
+    "tools": "Tools & DevOps",
+    "architecture": "Architecture & Methods",
+    "techList": ["Kotlin", "C#", "Java", "JavaScript", "TypeScript", "Python", "HTML", "CSS", "Bash", "C", "C++", "XML"],
+    "frameworksList": ["Jetpack Compose", ".NET", "Spring Boot", "React", "Tailwind CSS", "Node.js", "Express", "FastAPI", "Vue", "Astro", "Vitest", "Playwright"],
+    "toolsList": ["Git", "Gradle", "Docker", "Android Studio", "VS Code", "Firebase", "SQL Server", "Azure", "GitHub Copilot", "MongoDB", "PostgreSQL", "Maven"],
+    "architectureList": ["MVVM", "MVI", "MVC", "Clean Architecture", "Multimodular", "Scrum", "Agile"],
     "softList": [
       "Teamwork",
       "Communication",
