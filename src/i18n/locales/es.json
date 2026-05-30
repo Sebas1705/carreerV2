@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "hero": "Inicio",
+    "about": "Sobre mí",
+    "skills": "Habilidades",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "education": "Formación",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "greeting": "Hola, soy",
+    "name": "Sebastián García",
+    "role": "Desarrollador Full Stack & Móvil",
+    "tagline": "Diseño frontends rápidos, APIs sólidas y experiencias móviles listas para producción.",
+    "cta_work": "Ver mi trabajo",
+    "cta_contact": "Contactar"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "bio": "Con base en Madrid, España. Construyo productos digitales con cuidado — desde apps móviles hasta sistemas web full-stack.",
+    "pillars": {
+      "curiosity": {
+        "title": "Curiosidad",
+        "desc": "Me mantengo al día con los últimos avances tecnológicos y me encanta explorar nuevas ideas y herramientas."
+      },
+      "constancy": {
+        "title": "Constancia",
+        "desc": "Mantengo el esfuerzo en proyectos complejos a largo plazo, superando desafíos con dedicación."
+      },
+      "responsibility": {
+        "title": "Responsabilidad",
+        "desc": "Entrego trabajo profesional con compromiso, cumpliendo estándares con atención al detalle."
+      }
+    }
+  },
+  "skills": {
+    "title": "Habilidades",
+    "technical": "Técnicas",
+    "soft": "Habilidades Blandas",
+    "languages": "Lenguajes y Frameworks",
+    "tools": "Herramientas y Plataformas",
+    "techList": ["Kotlin", "C#", "HTML", "Bash", "JavaScript", "TypeScript"],
+    "toolsList": ["Git", "Android Studio", "Jetpack Compose", "VS Code", "GitHub Copilot", "Gradle"],
+    "softList": ["Trabajo en equipo", "Comunicación", "Resolución de problemas", "Adaptabilidad", "Proactividad", "Gestión del tiempo", "Pensamiento crítico", "Aprendizaje continuo", "Creatividad", "Empatía"]
+  },
+  "experience": {
+    "title": "Experiencia",
+    "jobs": [
+      {
+        "role": "Junior Desarrollador Full Stack & Móvil",
+        "company": "Solusoft",
+        "period": "Marzo 2025 – Presente",
+        "type": "Híbrido",
+        "projects": ["Sistema AGEDI", "Frontend/backend Sisley", "App móvil Iberext", "Portal musical EPDM"]
+      },
+      {
+        "role": "Prácticas Desarrollador Full Stack & Móvil",
+        "company": "Solusoft",
+        "period": "Octubre 2024 – Febrero 2025",
+        "type": "Híbrido",
+        "projects": ["Sistema AGEDI", "Frontend/backend Sisley", "App móvil Iberext", "Portal musical EPDM"]
+      }
+    ]
+  },
+  "projects": {
+    "title": "Proyectos",
+    "view_code": "Ver código",
+    "items": [
+      {
+        "name": "Orquestador VPS Local",
+        "desc": "Sistema de gestión de recursos Linux con scripts de automatización para infraestructura propia.",
+        "tags": ["Linux", "Bash", "DevOps", "Automatización"]
+      },
+      {
+        "name": "YouKnow",
+        "desc": "App móvil de red social educativa con gamificación construida con Jetpack Compose.",
+        "tags": ["Kotlin", "Jetpack Compose", "Firebase", "Android"]
+      },
+      {
+        "name": "Katas de Codewars",
+        "desc": "Soluciones de algoritmos en múltiples lenguajes, abordando desafíos complejos de programación.",
+        "tags": ["Algoritmos", "Kotlin", "C#", "Resolución de problemas"]
+      }
+    ]
+  },
+  "education": {
+    "title": "Formación",
+    "certifications": "Certificaciones",
+    "items": [
+      {
+        "degree": "Máster en Desarrollo con IA",
+        "school": "BigSchool & Universidad Isabel I",
+        "period": "Oct 2025 – Presente",
+        "icon": "🎓"
+      },
+      {
+        "degree": "Grado en Ingeniería Informática",
+        "school": "Universidad Rey Juan Carlos",
+        "period": "Sept 2020 – Junio 2025",
+        "icon": "🎓"
+      },
+      {
+        "degree": "Bachillerato – Tecnológico",
+        "school": "IES Maestro Matías Bravo",
+        "period": "Sept 2018 – Junio 2020",
+        "icon": "📚"
+      }
+    ],
+    "certs": [
+      { "name": "Jetpack Compose", "issuer": "AppCademy", "date": "Dic 2025" },
+      { "name": "Firebase para Android", "issuer": "AppCademy", "date": "Dic 2025" },
+      { "name": "Master Android Development", "issuer": "Udemy", "date": "Ago 2025" }
+    ]
+  },
+  "contact": {
+    "title": "Hablemos",
+    "subtitle": "Estoy abierto a nuevas oportunidades y colaboraciones. ¡No dudes en escribirme!",
+    "email_cta": "Envíame un correo",
+    "location": "Madrid, España"
+  }
+}

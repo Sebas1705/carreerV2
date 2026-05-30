@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Read(//c/Users/sebss/.claude/projects/c--Users-sebss-Documents-carreer/memory/**)"
+    ]
+  }
+}

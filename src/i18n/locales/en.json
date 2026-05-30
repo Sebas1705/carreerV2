@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "hero": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "experience": "Experience",
+    "projects": "Projects",
+    "education": "Education",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Sebastián García",
+    "role": "Full Stack & Mobile Developer",
+    "tagline": "I design fast frontends, solid APIs and production-ready mobile experiences.",
+    "cta_work": "View my work",
+    "cta_contact": "Contact me"
+  },
+  "about": {
+    "title": "About Me",
+    "bio": "Based in Madrid, Spain. I build digital products with care — from mobile apps to full-stack web systems.",
+    "pillars": {
+      "curiosity": {
+        "title": "Curiosity",
+        "desc": "I stay current with the latest tech developments and love exploring new ideas and tools."
+      },
+      "constancy": {
+        "title": "Constancy",
+        "desc": "I sustain effort on complex, long-term projects, pushing through challenges with dedication."
+      },
+      "responsibility": {
+        "title": "Responsibility",
+        "desc": "I deliver professional work with commitment, meeting standards with attention to detail."
+      }
+    }
+  },
+  "skills": {
+    "title": "Skills",
+    "technical": "Technical",
+    "soft": "Soft Skills",
+    "languages": "Languages & Frameworks",
+    "tools": "Tools & Platforms",
+    "techList": ["Kotlin", "C#", "HTML", "Bash", "JavaScript", "TypeScript"],
+    "toolsList": ["Git", "Android Studio", "Jetpack Compose", "VS Code", "GitHub Copilot", "Gradle"],
+    "softList": ["Teamwork", "Communication", "Problem-solving", "Adaptability", "Proactivity", "Time management", "Critical thinking", "Continuous learning", "Creativity", "Empathy"]
+  },
+  "experience": {
+    "title": "Experience",
+    "jobs": [
+      {
+        "role": "Junior Full Stack & Mobile Developer",
+        "company": "Solusoft",
+        "period": "March 2025 – Present",
+        "type": "Hybrid",
+        "projects": ["AGEDI system", "Sisley frontend/backend", "Iberext mobile app", "EPDM music portal"]
+      },
+      {
+        "role": "Full Stack & Mobile Developer Intern",
+        "company": "Solusoft",
+        "period": "October 2024 – February 2025",
+        "type": "Hybrid",
+        "projects": ["AGEDI system", "Sisley frontend/backend", "Iberext mobile app", "EPDM music portal"]
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "view_code": "View code",
+    "items": [
+      {
+        "name": "Local VPS Orchestrator",
+        "desc": "Linux resource management system with automation scripts for self-hosted infrastructure.",
+        "tags": ["Linux", "Bash", "DevOps", "Automation"]
+      },
+      {
+        "name": "YouKnow",
+        "desc": "Educational social network mobile app with gamification features built with Jetpack Compose.",
+        "tags": ["Kotlin", "Jetpack Compose", "Firebase", "Android"]
+      },
+      {
+        "name": "Codewars Katas",
+        "desc": "Algorithm solutions across multiple languages, tackling complex programming challenges.",
+        "tags": ["Algorithms", "Kotlin", "C#", "Problem-solving"]
+      }
+    ]
+  },
+  "education": {
+    "title": "Education",
+    "certifications": "Certifications",
+    "items": [
+      {
+        "degree": "Master's in AI Development",
+        "school": "BigSchool & Isabel I University",
+        "period": "Oct 2025 – Present",
+        "icon": "🎓"
+      },
+      {
+        "degree": "Bachelor's in Computer Engineering",
+        "school": "Rey Juan Carlos University",
+        "period": "Sept 2020 – June 2025",
+        "icon": "🎓"
+      },
+      {
+        "degree": "Baccalaureate – Technology",
+        "school": "IES Maestro Matías Bravo",
+        "period": "Sept 2018 – June 2020",
+        "icon": "📚"
+      }
+    ],
+    "certs": [
+      { "name": "Jetpack Compose", "issuer": "AppCademy", "date": "Dec 2025" },
+      { "name": "Firebase for Android", "issuer": "AppCademy", "date": "Dec 2025" },
+      { "name": "Master Android Development", "issuer": "Udemy", "date": "Aug 2025" }
+    ]
+  },
+  "contact": {
+    "title": "Let's Talk",
+    "subtitle": "I'm open to new opportunities and collaborations. Feel free to reach out!",
+    "email_cta": "Send me an email",
+    "location": "Madrid, Spain"
+  }
+}
