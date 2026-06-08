@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { usePortfolioData } from '../context/PortfolioDataContext'
 import { localize } from '../lib/localize'
 import { useLang } from '../hooks/useLang'
+import {
+  Document, Page, Text, View, Link, StyleSheet, Font,
+  pdf,
+} from '@react-pdf/renderer'
 
 // ── Role profiles ─────────────────────────────────────────────────────────────
 type RoleId = 'fullstack' | 'mobile' | 'backend' | 'frontend'
@@ -12,10 +16,8 @@ interface RoleProfile {
   labelEs: string
   tabEn: string
   tabEs: string
-  // Keyword tags shown under the title (ATS bait + human scan)
   keywordsEn: string[]
   keywordsEs: string[]
-  // Concise, quantified, action-verb summary
   summaryEn: string
   summaryEs: string
   prioritySkillIds: string[]
@@ -88,7 +90,6 @@ const ROLES: Record<RoleId, RoleProfile> = {
 
 const ROLE_IDS: RoleId[] = ['fullstack', 'mobile', 'backend', 'frontend']
 
-// ── Spoken languages (static, not in data) ───────────────────────────────────
 const SPOKEN_LANGS = {
   en: [
     { lang: 'Spanish', level: 'Native (C2)' },
@@ -100,130 +101,91 @@ const SPOKEN_LANGS = {
   ],
 }
 
-// ── Print helper ──────────────────────────────────────────────────────────────
-function printCV(html: string, uiLang: string) {
-  const win = window.open('', '_blank')
-  if (!win) return
-  win.document.write(`<!DOCTYPE html>
-<html lang="${uiLang}">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width"/>
-<title>CV – Sebastián Ramiro Entrerrios García</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+// ── PDF styles ────────────────────────────────────────────────────────────────
+Font.register({
+  family: 'Helvetica',
+  fonts: [
+    { src: 'https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0C4nY1M2xLER.woff2', fontWeight: 400 },
+    { src: 'https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVIUwaEQbjA.woff2', fontWeight: 700 },
+  ],
+})
 
-  body {
-    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
-    color: #1e293b;
-    background: #fff;
-    line-height: 1.45;
-    padding: 18mm 16mm;
-  }
+const PURPLE = '#7c3aed'
+const DARK   = '#1e293b'
+const MID    = '#475569'
+const LIGHT  = '#94a3b8'
+const BORDER = '#ede9fe'
 
-  /* ── Header ── */
-  .cv-header { display: flex; gap: 16px; align-items: flex-start; }
-  .cv-photo {
-    width: 76px; height: 76px; border-radius: 50%; object-fit: cover;
-    border: 2.5px solid #7c3aed; flex-shrink: 0;
-  }
-  .cv-header-text { flex: 1; min-width: 0; }
-  .cv-name { font-size: 22pt; font-weight: 800; color: #1e293b; letter-spacing: -0.03em; }
-  .cv-title { font-size: 12pt; font-weight: 600; color: #7c3aed; margin-top: 2px; }
-  .cv-contact {
-    display: flex; flex-wrap: wrap; gap: 4px 18px;
-    margin-top: 6px; font-size: 8.5pt; color: #475569;
-    border-top: 1.5px solid #7c3aed; padding-top: 6px; margin-top: 6px;
-  }
-  .cv-contact a { color: #475569; text-decoration: none; }
-  .cv-keywords {
-    display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
-  }
-  .cv-kw {
-    background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe;
-    border-radius: 3px; padding: 1px 7px; font-size: 8pt; font-weight: 600;
-  }
+const s = StyleSheet.create({
+  page:       { fontFamily: 'Helvetica', fontSize: 9, color: DARK, paddingTop: 28, paddingBottom: 28, paddingHorizontal: 32, lineHeight: 1.4 },
+  // header
+  header:     { flexDirection: 'row', gap: 12, marginBottom: 10 },
+  headerText: { flex: 1 },
+  name:       { fontSize: 18, fontWeight: 700, color: DARK, letterSpacing: -0.5 },
+  title:      { fontSize: 10, fontWeight: 700, color: PURPLE, marginTop: 2 },
+  contactRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 2, marginTop: 5, fontSize: 7.5, color: MID, borderTopWidth: 1.5, borderTopColor: PURPLE, paddingTop: 4 },
+  contactSep: { color: LIGHT },
+  kwRow:      { flexDirection: 'row', flexWrap: 'wrap', gap: 3, marginTop: 5 },
+  kw:         { fontSize: 7, fontWeight: 700, color: PURPLE, borderWidth: 1, borderColor: '#ddd6fe', backgroundColor: '#f5f3ff', borderRadius: 2, paddingHorizontal: 5, paddingVertical: 1 },
+  // section heading
+  h2:         { fontSize: 7, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.2, color: PURPLE, borderBottomWidth: 1, borderBottomColor: BORDER, paddingBottom: 2, marginTop: 12, marginBottom: 5 },
+  // summary
+  summary:    { fontSize: 8.5, color: '#334155', lineHeight: 1.5 },
+  // job
+  job:        { marginBottom: 8 },
+  jobRow:     { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  jobTitle:   { fontSize: 9, fontWeight: 700, color: DARK },
+  jobMeta:    { fontSize: 7.5, color: LIGHT },
+  jobCompany: { fontSize: 8.5, fontWeight: 700, color: PURPLE, marginTop: 1 },
+  jobDesc:    { fontSize: 8, color: MID, marginTop: 1 },
+  bullet:     { fontSize: 8, color: '#334155', marginTop: 1.5, paddingLeft: 8 },
+  jobProjs:   { fontSize: 7.5, color: LIGHT, marginTop: 2 },
+  // skills
+  skillRow:   { flexDirection: 'row', marginBottom: 3, alignItems: 'flex-start' },
+  skillCat:   { fontSize: 7.5, fontWeight: 700, color: MID, width: 110 },
+  skillList:  { flex: 1, fontSize: 8.5, color: DARK },
+  // projects
+  proj:       { marginBottom: 7 },
+  projRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  projName:   { fontSize: 9, fontWeight: 700, color: DARK },
+  projCtx:    { fontSize: 7.5, color: LIGHT },
+  projDesc:   { fontSize: 8, color: MID, marginTop: 1.5 },
+  projTags:   { fontSize: 7.5, color: LIGHT, marginTop: 1 },
+  // edu
+  edu:        { marginBottom: 7 },
+  eduRow:     { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  eduDeg:     { fontSize: 9, fontWeight: 700, color: DARK },
+  eduPeriod:  { fontSize: 7.5, color: LIGHT },
+  eduSchool:  { fontSize: 8, color: MID, fontWeight: 700, marginTop: 1 },
+  eduDetail:  { fontSize: 7.5, color: LIGHT, marginTop: 1 },
+  // certs
+  certRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3.5 },
+  certName:   { fontSize: 8.5, color: PURPLE, fontWeight: 700 },
+  certMeta:   { fontSize: 7.5, color: LIGHT },
+  // langs
+  langRow:    { flexDirection: 'row', gap: 20, flexWrap: 'wrap' },
+  langItem:   { fontSize: 8.5, color: DARK },
+  langBold:   { fontWeight: 700 },
+  // link inline
+  inlineLink: { fontSize: 7.5, color: PURPLE },
+})
 
-  /* ── Sections ── */
-  h2 {
-    font-size: 8pt; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.12em; color: #7c3aed;
-    border-bottom: 1px solid #ede9fe; padding-bottom: 2px;
-    margin: 14px 0 7px;
-  }
-
-  /* ── Experience ── */
-  .job { margin-bottom: 10px; }
-  .job-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .job-title { font-size: 10pt; font-weight: 700; color: #1e293b; }
-  .job-company { font-weight: 600; color: #7c3aed; }
-  .job-meta { font-size: 8.5pt; color: #64748b; white-space: nowrap; }
-  .job-sub { font-size: 8.5pt; color: #64748b; margin-top: 1px; }
-  .job ul { margin: 5px 0 0 14px; }
-  .job li { font-size: 9pt; color: #334155; margin-bottom: 2px; }
-  .job-projs { font-size: 8.5pt; color: #64748b; margin-top: 3px; }
-  .job-projs strong { color: #475569; }
-
-  /* ── Skills ── */
-  .skill-row { display: flex; gap: 6px; margin-bottom: 4px; align-items: baseline; }
-  .skill-cat { font-size: 8pt; font-weight: 700; color: #475569; width: 140px; flex-shrink: 0; }
-  .skill-list { font-size: 9pt; color: #1e293b; }
-
-  /* ── Projects ── */
-  .project { margin-bottom: 8px; }
-  .proj-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .proj-name { font-size: 9.5pt; font-weight: 700; color: #1e293b; }
-  .proj-name a { color: #7c3aed; text-decoration: none; font-weight: 400; font-size: 8.5pt; }
-  .proj-ctx { font-size: 8pt; color: #94a3b8; text-transform: capitalize; }
-  .proj-desc { font-size: 8.5pt; color: #475569; margin-top: 2px; }
-
-  /* ── Education ── */
-  .edu-item { margin-bottom: 8px; }
-  .edu-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .edu-deg { font-size: 9.5pt; font-weight: 700; color: #1e293b; }
-  .edu-period { font-size: 8.5pt; color: #64748b; white-space: nowrap; }
-  .edu-school { font-size: 8.5pt; color: #475569; margin-top: 1px; }
-  .edu-detail { font-size: 8pt; color: #94a3b8; margin-top: 1px; }
-
-  /* ── Certs ── */
-  .cert-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 4px; }
-  .cert-name { font-size: 9pt; color: #334155; font-weight: 500; }
-  .cert-name a { color: #7c3aed; text-decoration: none; }
-  .cert-meta { font-size: 8pt; color: #94a3b8; white-space: nowrap; }
-
-  /* ── Languages ── */
-  .lang-row { display: flex; gap: 24px; flex-wrap: wrap; }
-  .lang-item { font-size: 9pt; color: #334155; }
-  .lang-item strong { color: #1e293b; }
-
-  /* ── Print ── */
-  @media print {
-    @page { size: A4; margin: 14mm 13mm; }
-    body { padding: 0; }
-    a { color: inherit !important; }
-  }
-</style>
-</head>
-<body>${html}</body>
-</html>`)
-  win.document.close()
-  setTimeout(() => win.print(), 350)
+// ── PDF Document ──────────────────────────────────────────────────────────────
+interface CVDocProps {
+  lang: 'en' | 'es'
+  role: RoleId
+  personal: ReturnType<typeof usePortfolioData>['personal']
+  skills: ReturnType<typeof usePortfolioData>['skills']
+  jobs: ReturnType<typeof usePortfolioData>['jobs']
+  projects: ReturnType<typeof usePortfolioData>['projects']
+  education: ReturnType<typeof usePortfolioData>['education']
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
-interface Props { onClose: () => void }
-
-export default function CVGenerator({ onClose }: Props) {
-  const lang = useLang()
-  const { personal, skills, jobs, projects, education, loading } = usePortfolioData()
-  const [role, setRole] = useState<RoleId>('fullstack')
-
+function CVDocument({ lang, role, personal, skills, jobs, projects, education }: CVDocProps) {
   const profile = ROLES[role]
-  const loc = (v: unknown) => localize(v as Parameters<typeof localize>[0], lang)
   const isEs = lang === 'es'
+  const loc = (v: unknown) => localize(v as Parameters<typeof localize>[0], lang)
 
-  // Filtered & ordered skills
   const cvSkills = profile.prioritySkillIds
     .map(id => skills.find(s => s.id === id))
     .filter(Boolean) as typeof skills
@@ -234,21 +196,20 @@ export default function CVGenerator({ onClose }: Props) {
     skillGroups[s.category].push(s.name)
   })
 
-  // Merge cloud+databases, enforce fixed display order
   const CV_ROW_ORDER = [
-    { key: 'languages',    cats: ['languages'],                label: { en: 'Programming Languages', es: 'Lenguajes' } },
-    { key: 'frameworks',   cats: ['frameworks'],               label: { en: 'Frameworks & Libraries', es: 'Frameworks' } },
-    { key: 'tools',        cats: ['tools'],                    label: { en: 'Tools & DevOps',         es: 'Herramientas & DevOps' } },
-    { key: 'clouddb',      cats: ['databases', 'cloud'],       label: { en: 'Cloud & Databases',      es: 'Cloud & Bases de datos' } },
-    { key: 'architecture', cats: ['architecture'],             label: { en: 'Architecture',            es: 'Arquitectura' } },
-    { key: 'methodologies',cats: ['methodologies'],            label: { en: 'Methodologies',           es: 'Metodologías' } },
-    { key: 'ai',           cats: ['ai', 'ides', 'os'],         label: { en: 'AI & Tools',              es: 'IA y Herramientas' } },
+    { key: 'languages',     cats: ['languages'],              label: { en: 'Programming Languages', es: 'Lenguajes' } },
+    { key: 'frameworks',    cats: ['frameworks'],             label: { en: 'Frameworks & Libraries', es: 'Frameworks' } },
+    { key: 'tools',         cats: ['tools'],                  label: { en: 'Tools & DevOps',         es: 'Herramientas & DevOps' } },
+    { key: 'clouddb',       cats: ['databases', 'cloud'],     label: { en: 'Cloud & Databases',      es: 'Cloud & Bases de datos' } },
+    { key: 'architecture',  cats: ['architecture'],           label: { en: 'Architecture',            es: 'Arquitectura' } },
+    { key: 'methodologies', cats: ['methodologies'],          label: { en: 'Methodologies',           es: 'Metodologías' } },
+    { key: 'ai',            cats: ['ai', 'ides', 'os'],       label: { en: 'AI & Tools',              es: 'IA y Herramientas' } },
   ] as const
+
   const skillRows = CV_ROW_ORDER
     .map(row => ({ ...row, names: row.cats.flatMap(c => skillGroups[c] ?? []) }))
     .filter(row => row.names.length > 0)
 
-  // Projects
   const allProjects = [...(projects.work ?? []), ...(projects.featured ?? [])]
   const cvProjects = profile.projectIds
     .map(id => allProjects.find(p => p.id === id))
@@ -256,125 +217,227 @@ export default function CVGenerator({ onClose }: Props) {
 
   const cvCerts = (education.certs ?? []).slice(0, profile.maxCerts)
   const spokenLangs = SPOKEN_LANGS[isEs ? 'es' : 'en']
-  const keywords = isEs ? profile.keywordsEs : profile.keywordsEn
-  const summary  = isEs ? profile.summaryEs : profile.summaryEn
-  const roleTitle = isEs ? profile.labelEs : profile.labelEn
+  const keywords    = isEs ? profile.keywordsEs : profile.keywordsEn
+  const summary     = isEs ? profile.summaryEs  : profile.summaryEn
+  const roleTitle   = isEs ? profile.labelEs    : profile.labelEn
 
-  // ── Build print HTML ────────────────────────────────────────────────────────
-  const buildPrintHTML = () => {
-    const contactItems = [
-      `<a href="mailto:${personal.email}">${personal.email}</a>`,
-      personal.social?.linkedin
-        ? `<a href="${personal.social.linkedin}">linkedin.com/in/sebastián-ramiro-entrerrios-garcía-b1a713217</a>`
-        : '',
-      personal.social?.github
-        ? `<a href="${personal.social.github}">github.com/Sebas1705</a>`
-        : '',
-      `📍 ${loc(personal.location)}`,
-    ].filter(Boolean).join(' &nbsp;|&nbsp; ')
+  const expLabel   = isEs ? 'Experiencia Profesional' : 'Professional Experience'
+  const skillsLbl  = isEs ? 'Habilidades Técnicas'    : 'Technical Skills'
+  const projsLbl   = isEs ? 'Proyectos Destacados'    : 'Key Projects'
+  const eduLbl     = isEs ? 'Formación Académica'     : 'Education'
+  const certsLbl   = isEs ? 'Certificaciones'         : 'Certifications'
+  const langsLbl   = isEs ? 'Idiomas'                 : 'Languages'
+  const profileLbl = isEs ? 'Perfil Profesional'      : 'Professional Profile'
 
-    const kwHTML = keywords.map(k => `<span class="cv-kw">${k}</span>`).join('')
+  return (
+    <Document title={`CV – Sebastián Ramiro Entrerrios García`} author="Sebastián Ramiro Entrerrios García" subject={roleTitle} creator="Portfolio CV Generator" keywords={keywords.join(', ')}>
+      <Page size="A4" style={s.page}>
 
-    const jobsHTML = jobs.map(j => {
-      const bullets = (j.achievements ?? []).map(a => `<li>${loc(a)}</li>`).join('')
-      const projs   = (j.projects ?? []).map(p => loc(p)).join(', ')
-      return `<div class="job">
-        <div class="job-row">
-          <span class="job-title">${loc(j.role)}</span>
-          <span class="job-meta">${loc(j.period)} · ${loc(j.type)}</span>
-        </div>
-        <div class="job-sub"><span class="job-company">${j.company}</span></div>
-        <div class="job-sub" style="margin-top:2px">${loc(j.desc)}</div>
-        ${bullets ? `<ul>${bullets}</ul>` : ''}
-        ${projs ? `<div class="job-projs"><strong>${isEs ? 'Proyectos' : 'Products'}:</strong> ${projs}</div>` : ''}
-      </div>`
-    }).join('')
+        {/* ── Header ── */}
+        <View style={s.header}>
+          <View style={s.headerText}>
+            <Text style={s.name}>Sebastián Ramiro Entrerrios García</Text>
+            <Text style={s.title}>{roleTitle}</Text>
+            <View style={s.contactRow}>
+              <Link src={`mailto:${personal.email}`} style={s.inlineLink}>{personal.email}</Link>
+              <Text style={s.contactSep}>  |  </Text>
+              {personal.social?.linkedin && (
+                <>
+                  <Link src={personal.social.linkedin} style={s.inlineLink}>linkedin.com/in/sebastián-ramiro-entrerrios-garcía-b1a713217</Link>
+                  <Text style={s.contactSep}>  |  </Text>
+                </>
+              )}
+              {personal.social?.github && (
+                <>
+                  <Link src={personal.social.github} style={s.inlineLink}>github.com/Sebas1705</Link>
+                  <Text style={s.contactSep}>  |  </Text>
+                </>
+              )}
+              <Text>{loc(personal.location)}</Text>
+            </View>
+            <View style={s.kwRow}>
+              {keywords.map(k => <Text key={k} style={s.kw}>{k}</Text>)}
+            </View>
+          </View>
+        </View>
 
-    const skillsHTML = skillRows.map(row => {
-      return `<div class="skill-row"><span class="skill-cat">${row.label[lang]}:</span><span class="skill-list">${row.names.join(', ')}</span></div>`
-    }).join('')
+        {/* ── Profile ── */}
+        <Text style={s.h2}>{profileLbl}</Text>
+        <Text style={s.summary}>{summary}</Text>
 
-    const projsHTML = cvProjects.slice(0, 5).map(p => {
-      const links = [
-        p.github ? `<a href="${p.github}">GitHub ↗</a>` : '',
-        p.demo   ? `<a href="${p.demo}">Demo ↗</a>`     : '',
-      ].filter(Boolean).join(' · ')
-      const tags = (p.tags ?? []).slice(0, 6).join(', ')
-      return `<div class="project">
-        <div class="proj-row">
-          <span class="proj-name">${p.name}${links ? ` &nbsp;${links}` : ''}</span>
-          <span class="proj-ctx">${p.context}</span>
-        </div>
-        <div class="proj-desc">${loc(p.desc)}</div>
-        ${tags ? `<div class="proj-desc" style="color:#94a3b8;margin-top:1px">${tags}</div>` : ''}
-      </div>`
-    }).join('')
+        {/* ── Experience ── */}
+        <Text style={s.h2}>{expLabel}</Text>
+        {jobs.map(j => (
+          <View key={j.id} style={s.job}>
+            <View style={s.jobRow}>
+              <Text style={s.jobTitle}>{loc(j.role)}</Text>
+              <Text style={s.jobMeta}>{loc(j.period)} · {loc(j.type)}</Text>
+            </View>
+            <Text style={s.jobCompany}>{j.company}</Text>
+            <Text style={s.jobDesc}>{loc(j.desc)}</Text>
+            {(j.achievements ?? []).map((a, i) => (
+              <Text key={i} style={s.bullet}>• {loc(a)}</Text>
+            ))}
+            {(j.projects ?? []).length > 0 && (
+              <Text style={s.jobProjs}>
+                {isEs ? 'Productos' : 'Products'}: {(j.projects ?? []).map(p => loc(p)).join(', ')}
+              </Text>
+            )}
+          </View>
+        ))}
 
-    const eduHTML = (education.items ?? []).map(e => `
-      <div class="edu-item">
-        <div class="edu-row">
-          <span class="edu-deg">${loc(e.degree)}</span>
-          <span class="edu-period">${loc(e.period)}</span>
-        </div>
-        <div class="edu-school">${e.school}</div>
-        <div class="edu-detail">${loc(e.detail)}</div>
-      </div>`).join('')
+        {/* ── Skills ── */}
+        <Text style={s.h2}>{skillsLbl}</Text>
+        {skillRows.map(row => (
+          <View key={row.key} style={s.skillRow}>
+            <Text style={s.skillCat}>{row.label[lang]}:</Text>
+            <Text style={s.skillList}>{row.names.join(', ')}</Text>
+          </View>
+        ))}
 
-    const certsHTML = cvCerts.map(c => `
-      <div class="cert-row">
-        <span class="cert-name"><a href="${c.url}">${loc(c.name)}</a></span>
-        <span class="cert-meta">${c.issuer} · ${c.date}</span>
-      </div>`).join('')
+        {/* ── Projects ── */}
+        <Text style={s.h2}>{projsLbl}</Text>
+        {cvProjects.slice(0, 5).map(p => (
+          <View key={p.id} style={s.proj}>
+            <View style={s.projRow}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1 }}>
+                <Text style={s.projName}>{p.name}</Text>
+                {p.github && <Link src={p.github} style={s.inlineLink}>GitHub ↗</Link>}
+                {p.demo   && <Link src={p.demo}   style={s.inlineLink}>Demo ↗</Link>}
+              </View>
+              <Text style={s.projCtx}>{p.context}</Text>
+            </View>
+            <Text style={s.projDesc}>{loc(p.desc)}</Text>
+            {(p.tags ?? []).length > 0 && (
+              <Text style={s.projTags}>{(p.tags ?? []).slice(0, 7).join(', ')}</Text>
+            )}
+          </View>
+        ))}
 
-    const langsHTML = `<div class="lang-row">${spokenLangs.map(l =>
-      `<div class="lang-item"><strong>${l.lang}:</strong> ${l.level}</div>`
-    ).join('')}</div>`
+        {/* ── Education ── */}
+        <Text style={s.h2}>{eduLbl}</Text>
+        {(education.items ?? []).map((e, i) => (
+          <View key={i} style={s.edu}>
+            <View style={s.eduRow}>
+              <Text style={s.eduDeg}>{loc(e.degree)}</Text>
+              <Text style={s.eduPeriod}>{loc(e.period)}</Text>
+            </View>
+            <Text style={s.eduSchool}>{e.school}</Text>
+            <Text style={s.eduDetail}>{loc(e.detail)}</Text>
+          </View>
+        ))}
 
-    const expLabel  = isEs ? 'Experiencia Profesional' : 'Professional Experience'
-    const skillsLbl = isEs ? 'Habilidades Técnicas'    : 'Technical Skills'
-    const projsLbl  = isEs ? 'Proyectos Destacados'    : 'Key Projects'
-    const eduLbl    = isEs ? 'Formación Académica'      : 'Education'
-    const certsLbl  = isEs ? 'Certificaciones'          : 'Certifications'
-    const langsLbl  = isEs ? 'Idiomas'                  : 'Languages'
-    const profileLbl= isEs ? 'Perfil Profesional'       : 'Professional Profile'
+        {/* ── Certifications ── */}
+        {cvCerts.length > 0 && (
+          <>
+            <Text style={s.h2}>{certsLbl}</Text>
+            {cvCerts.map((c, i) => (
+              <View key={i} style={s.certRow}>
+                <Link src={c.url} style={s.certName}>{loc(c.name)}</Link>
+                <Text style={s.certMeta}>{c.issuer} · {c.date}</Text>
+              </View>
+            ))}
+          </>
+        )}
 
-    const githubUser = personal.social?.github?.split('/').pop() ?? ''
-    const avatarUrl  = githubUser ? `https://avatars.githubusercontent.com/${githubUser}` : ''
+        {/* ── Languages ── */}
+        <Text style={s.h2}>{langsLbl}</Text>
+        <View style={s.langRow}>
+          {spokenLangs.map(l => (
+            <Text key={l.lang} style={s.langItem}>
+              <Text style={s.langBold}>{l.lang}: </Text>{l.level}
+            </Text>
+          ))}
+        </View>
 
-    return `
-      <div class="cv-header">
-        ${avatarUrl ? `<img class="cv-photo" src="${avatarUrl}" alt="photo" />` : ''}
-        <div class="cv-header-text">
-          <div class="cv-name">Sebastián Ramiro Entrerrios García</div>
-          <div class="cv-title">${roleTitle}</div>
-          <div class="cv-contact">${contactItems}</div>
-          <div class="cv-keywords">${kwHTML}</div>
-        </div>
-      </div>
+      </Page>
+    </Document>
+  )
+}
 
-      <h2>${profileLbl}</h2>
-      <p style="font-size:9.5pt;color:#334155;line-height:1.5">${summary}</p>
+// ── Download helper ───────────────────────────────────────────────────────────
+async function downloadPDF(doc: React.ReactElement, filename: string) {
+  const blob = await pdf(doc).toBlob()
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href     = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
 
-      <h2>${expLabel}</h2>
-      ${jobsHTML}
+// ── Main component ────────────────────────────────────────────────────────────
+interface Props { onClose: () => void }
 
-      <h2>${skillsLbl}</h2>
-      ${skillsHTML}
+export default function CVGenerator({ onClose }: Props) {
+  const lang = useLang()
+  const { personal, skills, jobs, projects, education, loading } = usePortfolioData()
+  const [role, setRole]       = useState<RoleId>('fullstack')
+  const [generating, setGenerating] = useState(false)
 
-      <h2>${projsLbl}</h2>
-      ${projsHTML}
+  const profile = ROLES[role]
+  const loc = (v: unknown) => localize(v as Parameters<typeof localize>[0], lang)
+  const isEs = lang === 'es'
 
-      <h2>${eduLbl}</h2>
-      ${eduHTML}
+  const cvSkills = profile.prioritySkillIds
+    .map(id => skills.find(s => s.id === id))
+    .filter(Boolean) as typeof skills
 
-      ${certsHTML ? `<h2>${certsLbl}</h2>${certsHTML}` : ''}
+  const skillGroups: Record<string, string[]> = {}
+  cvSkills.forEach(s => {
+    if (!skillGroups[s.category]) skillGroups[s.category] = []
+    skillGroups[s.category].push(s.name)
+  })
 
-      <h2>${langsLbl}</h2>
-      ${langsHTML}
-    `
+  const CV_ROW_ORDER = [
+    { key: 'languages',     cats: ['languages'],              label: { en: 'Programming Languages', es: 'Lenguajes' } },
+    { key: 'frameworks',    cats: ['frameworks'],             label: { en: 'Frameworks & Libraries', es: 'Frameworks' } },
+    { key: 'tools',         cats: ['tools'],                  label: { en: 'Tools & DevOps',         es: 'Herramientas & DevOps' } },
+    { key: 'clouddb',       cats: ['databases', 'cloud'],     label: { en: 'Cloud & Databases',      es: 'Cloud & Bases de datos' } },
+    { key: 'architecture',  cats: ['architecture'],           label: { en: 'Architecture',            es: 'Arquitectura' } },
+    { key: 'methodologies', cats: ['methodologies'],          label: { en: 'Methodologies',           es: 'Metodologías' } },
+    { key: 'ai',            cats: ['ai', 'ides', 'os'],       label: { en: 'AI & Tools',              es: 'IA y Herramientas' } },
+  ] as const
+
+  const skillRows = CV_ROW_ORDER
+    .map(row => ({ ...row, names: row.cats.flatMap(c => skillGroups[c] ?? []) }))
+    .filter(row => row.names.length > 0)
+
+  const allProjects = [...(projects.work ?? []), ...(projects.featured ?? [])]
+  const cvProjects = profile.projectIds
+    .map(id => allProjects.find(p => p.id === id))
+    .filter(Boolean) as typeof allProjects
+
+  const cvCerts       = (education.certs ?? []).slice(0, profile.maxCerts)
+  const spokenLangs   = SPOKEN_LANGS[isEs ? 'es' : 'en']
+  const keywords      = isEs ? profile.keywordsEs : profile.keywordsEn
+  const summary       = isEs ? profile.summaryEs  : profile.summaryEn
+  const roleTitle     = isEs ? profile.labelEs    : profile.labelEn
+
+  const handleDownload = async () => {
+    setGenerating(true)
+    try {
+      const doc = (
+        <CVDocument
+          lang={lang}
+          role={role}
+          personal={personal}
+          skills={skills}
+          jobs={jobs}
+          projects={projects}
+          education={education}
+        />
+      )
+      const slug = role === 'fullstack' ? 'fullstack-mobile'
+        : role === 'mobile'   ? 'android'
+        : role === 'backend'  ? 'backend'
+        : 'frontend'
+      await downloadPDF(doc, `CV_Sebastian_Entrerrios_${slug}_${lang.toUpperCase()}.pdf`)
+    } finally {
+      setGenerating(false)
+    }
   }
 
-  // ── Preview render ──────────────────────────────────────────────────────────
   return (
     <AnimatePresence>
       <motion.div
@@ -399,7 +462,7 @@ export default function CVGenerator({ onClose }: Props) {
                 {isEs ? 'Generador de CV' : 'CV Generator'}
               </h2>
               <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
-                {isEs ? 'Optimizado para ATS y procesos de selección actuales' : 'Optimised for ATS and modern recruitment processes'}
+                {isEs ? 'PDF con texto seleccionable · Optimizado para ATS' : 'Selectable-text PDF · ATS-optimised'}
               </p>
             </div>
             <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
@@ -428,7 +491,6 @@ export default function CVGenerator({ onClose }: Props) {
 
                 {/* Name + title */}
                 <div className="pb-4 border-b-2 border-violet-600 flex gap-4 items-start">
-                  {/* Avatar */}
                   {personal.social?.github && (() => {
                     const user = personal.social.github.split('/').pop()
                     return user ? (
@@ -439,30 +501,21 @@ export default function CVGenerator({ onClose }: Props) {
                       />
                     ) : null
                   })()}
-
                   <div className="flex-1 min-w-0">
                     <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                       Sebastián Ramiro Entrerrios García
                     </h1>
                     <p className="text-sm font-semibold text-violet-700 mt-0.5">{roleTitle}</p>
-
-                    {/* Contact */}
                     <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-2 text-[10px] text-slate-500">
                       <a href={`mailto:${personal.email}`} className="hover:text-violet-600">{personal.email}</a>
                       {personal.social?.linkedin && (
-                        <a href={personal.social.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-violet-600">
-                          LinkedIn ↗
-                        </a>
+                        <a href={personal.social.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-violet-600">LinkedIn ↗</a>
                       )}
                       {personal.social?.github && (
-                        <a href={personal.social.github} target="_blank" rel="noopener noreferrer" className="hover:text-violet-600">
-                          github.com/Sebas1705
-                        </a>
+                        <a href={personal.social.github} target="_blank" rel="noopener noreferrer" className="hover:text-violet-600">github.com/Sebas1705</a>
                       )}
                       <span>📍 {loc(personal.location)}</span>
                     </div>
-
-                    {/* Keywords */}
                     <div className="flex flex-wrap gap-1 mt-2">
                       {keywords.map(k => (
                         <span key={k} className="text-[9px] font-semibold px-1.5 py-0.5 bg-violet-50 text-violet-700 border border-violet-200 rounded">
@@ -514,7 +567,7 @@ export default function CVGenerator({ onClose }: Props) {
                   </div>
                 </section>
 
-                {/* Technical skills — inline comma format (ATS-friendly) */}
+                {/* Skills */}
                 <section className="mb-4">
                   <h2 className="text-[9px] font-bold uppercase tracking-[0.12em] text-violet-700 border-b border-violet-100 pb-1 mb-2">
                     {isEs ? 'Habilidades Técnicas' : 'Technical Skills'}
@@ -612,17 +665,20 @@ export default function CVGenerator({ onClose }: Props) {
           <div className="flex items-center justify-between gap-3 px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
             <p className="text-[10px] text-slate-400 dark:text-slate-500">
               {isEs
-                ? '💡 Optimizado para ATS · Se abrirá ventana para guardar como PDF'
-                : '💡 ATS-optimised · A new window will open to save as PDF'}
+                ? '✓ Texto seleccionable · Compatible con ATS · Descarga directa'
+                : '✓ Selectable text · ATS-compatible · Direct download'}
             </p>
             <div className="flex gap-2">
               <button onClick={onClose}
                 className="px-4 py-2 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                 {isEs ? 'Cerrar' : 'Close'}
               </button>
-              <button onClick={() => printCV(buildPrintHTML(), lang)} disabled={loading}
-                className="px-5 py-2 text-xs font-semibold rounded-lg bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-500/25 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer">
-                {isEs ? '⬇ Descargar / Imprimir' : '⬇ Download / Print'}
+              <button onClick={handleDownload} disabled={loading || generating}
+                className="px-5 py-2 text-xs font-semibold rounded-lg bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-500/25 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer flex items-center gap-2">
+                {generating
+                  ? <><span className="animate-spin inline-block w-3 h-3 border-2 border-white/30 border-t-white rounded-full" />{isEs ? 'Generando…' : 'Generating…'}</>
+                  : <>{isEs ? '⬇ Descargar PDF' : '⬇ Download PDF'}</>
+                }
               </button>
             </div>
           </div>
