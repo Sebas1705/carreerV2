@@ -5,7 +5,7 @@ import { localize } from '../lib/localize'
 import { useLang } from '../hooks/useLang'
 import {
   Document, Page, Text, View, Link, StyleSheet, Font,
-  pdf,
+  pdf, type DocumentProps,
 } from '@react-pdf/renderer'
 
 // ── Role profiles ─────────────────────────────────────────────────────────────
@@ -356,7 +356,7 @@ function CVDocument({ lang, role, personal, skills, jobs, projects, education }:
 }
 
 // ── Download helper ───────────────────────────────────────────────────────────
-async function downloadPDF(doc: React.ReactElement, filename: string) {
+async function downloadPDF(doc: React.ReactElement<DocumentProps>, filename: string) {
   const blob = await pdf(doc).toBlob()
   const url  = URL.createObjectURL(blob)
   const a    = document.createElement('a')
