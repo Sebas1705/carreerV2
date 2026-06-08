@@ -100,20 +100,6 @@ const SPOKEN_LANGS = {
   ],
 }
 
-// ── Category labels ───────────────────────────────────────────────────────────
-const CAT_LABEL: Record<string, { en: string; es: string }> = {
-  languages:    { en: 'Programming Languages', es: 'Lenguajes' },
-  frameworks:   { en: 'Frameworks & Libraries', es: 'Frameworks' },
-  tools:        { en: 'Tools & DevOps',         es: 'Herramientas & DevOps' },
-  databases:    { en: 'Databases',              es: 'Bases de datos' },
-  cloud:        { en: 'Cloud',                  es: 'Cloud' },
-  architecture: { en: 'Architecture & Patterns','es': 'Arquitectura' },
-  methodologies:{ en: 'Methodologies',          es: 'Metodologías' },
-  ides:         { en: 'IDEs',                   es: 'IDEs' },
-  os:           { en: 'OS',                     es: 'SO' },
-  ai:           { en: 'AI Tools',               es: 'Herramientas IA' },
-}
-
 // ── Print helper ──────────────────────────────────────────────────────────────
 function printCV(html: string, uiLang: string) {
   const win = window.open('', '_blank')

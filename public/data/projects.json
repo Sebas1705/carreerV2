@@ -70,7 +70,7 @@
       "long_desc":{ "en": "Personal Android project built as a production-grade template and game. Uses multi-module architecture (app, core, data, domain, feature) with Gradle convention plugins, Detekt static analysis, CI/CD validation workflows, LeakCanary and Chucker for debug diagnostics. Integrates Firebase Authentication with Google Sign-In and Couchbase + OpenDB for data persistence. Navigation: Splash → Login → Home with bottom nav (Face, Ranking, Profile) supporting offline and online game modes.", "es": "Proyecto Android personal desarrollado como plantilla de nivel producción y juego. Usa arquitectura multi-módulo (app, core, data, domain, feature) con plugins de convención Gradle, análisis estático Detekt, workflows CI/CD, LeakCanary y Chucker para diagnóstico en debug. Integra Firebase Authentication con Google Sign-In y Couchbase + OpenDB para persistencia de datos. Navegación: Splash → Login → Home con barra inferior (Face, Ranking, Profile) con modos de juego offline y online." },
       "tags": ["Kotlin", "Jetpack Compose", "Firebase", "Multi-Module", "Detekt", "CI/CD"],
       "github": "https://github.com/Sebas1705/ImpostorAndroidGame",
-      "demo": null
+      "demo": "https://play.google.com/store/apps/details?id=es.sebas1705.impostorandroidgame"
     },
     {
       "id": "vpslocalorchestrator",
