@@ -69,6 +69,7 @@ export interface RawPersonal {
   bio: ML
   email: string
   location: ML
+  cvUrl?: string
   social: {
     github: string
     linkedin: string
@@ -148,6 +149,7 @@ function adaptPersonal(raw: Record<string, string>): RawPersonal {
     bio:      ml(raw.bio_en, raw.bio_es),
     email:    raw.email ?? '',
     location: ml(raw.location_en, raw.location_es),
+    cvUrl: raw.cv_url ?? undefined,
     social: {
       github:   raw.github ?? '',
       linkedin: raw.linkedin ?? '',
