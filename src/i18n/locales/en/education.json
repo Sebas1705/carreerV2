@@ -1,7 +1,8 @@
 {
   "education": {
     "title": "Education",
-    "certifications": "Certifications",
+    "tab_academic": "Academic",
+    "tab_certifications": "Certifications",
     "show_more": "+{{count}} more",
     "show_less": "Show less"
   }
