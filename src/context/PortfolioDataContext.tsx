@@ -163,28 +163,28 @@ function adaptPersonal(raw: Record<string, string>): RawPersonal {
 function adaptJobs(rows: any[]): RawJob[] {
   return rows.map(r => ({
     id:           r.id,
-    role:         ml(r.role_en, r.role_es),
+    role:         r.role,
     company:      r.company,
-    companyUrl:   r.company_url,
-    period:       ml(r.period_en, r.period_es),
-    type:         ml(r.type_en, r.type_es),
-    desc:         ml(r.desc_en, r.desc_es),
-    projects:     parse(r.projects).map((p: any) => ml(p.en, p.es)),
-    achievements: parse(r.achievements).map((a: any) => ml(a.en, a.es)),
+    companyUrl:   r.companyUrl,
+    period:       r.period,
+    type:         r.type,
+    desc:         r.desc,
+    projects:     (Array.isArray(r.projects) ? r.projects : parse(r.projects)).map((p: any) => ml(p.en, p.es)),
+    achievements: (Array.isArray(r.achievements) ? r.achievements : parse(r.achievements)).map((a: any) => ml(a.en, a.es)),
   }))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function adaptProjects(rows: any[]): { work: RawProject[]; featured: RawProject[] } {
   const toProject = (r: any): RawProject => ({
-    id:       r.id,
-    name:     r.name,
-    context:  r.context,
-    desc:     ml(r.desc_en, r.desc_es),
-    long_desc: ml(r.long_desc_en, r.long_desc_es),
-    tags:     parse(r.tags),
-    github:   r.github ?? null,
-    demo:     r.demo ?? null,
+    id:        r.id,
+    name:      r.name,
+    context:   r.context,
+    desc:      r.desc,
+    long_desc: r.long_desc,
+    tags:      Array.isArray(r.tags) ? r.tags : parse(r.tags),
+    github:    r.github ?? null,
+    demo:      r.demo ?? null,
   })
   return {
     work:     rows.filter(r => r.context === 'work').map(toProject),
@@ -196,17 +196,17 @@ function adaptProjects(rows: any[]): { work: RawProject[]; featured: RawProject[
 function adaptEducation(eduRows: any[], certRows: any[]): { items: RawEduItem[]; certs: RawCert[] } {
   return {
     items: eduRows.map(r => ({
-      degree: ml(r.degree_en, r.degree_es),
+      degree: r.degree,
       school: r.school,
-      period: ml(r.period_en, r.period_es),
-      detail: ml(r.detail_en, r.detail_es),
+      period: r.period,
+      detail: r.detail,
       icon:   r.icon ?? '🎓',
     })),
     certs: certRows.map(r => ({
-      name:   ml(r.name_en, r.name_es),
+      name:   r.name,
       issuer: r.issuer,
       date:   r.date,
-      desc:   ml(r.desc_en, r.desc_es),
+      desc:   r.desc,
       url:    r.url,
     })),
   }
