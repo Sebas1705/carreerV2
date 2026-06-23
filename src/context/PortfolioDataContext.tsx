@@ -140,18 +140,18 @@ const ml = (en: any, es: any): ML => ({ en: en ?? '', es: es ?? '' })
 const parse = (v: any) => { try { return typeof v === 'string' ? JSON.parse(v) : v } catch { return [] } }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function adaptPersonal(raw: Record<string, string>): RawPersonal {
+function adaptPersonal(raw: any): RawPersonal {
   return {
-    name:     raw.name ?? '',
-    greeting: ml(raw.greeting_en, raw.greeting_es),
-    role:     ml(raw.role_en, raw.role_es),
-    tagline:  ml(raw.tagline_en, raw.tagline_es),
-    bio:      ml(raw.bio_en, raw.bio_es),
-    email:    raw.email ?? '',
-    location: ml(raw.location_en, raw.location_es),
-    cvUrl: raw.cv_url ?? undefined,
+    name:     raw.name     ?? '',
+    greeting: raw.greeting ?? ml('', ''),
+    role:     raw.role     ?? ml('', ''),
+    tagline:  raw.tagline  ?? ml('', ''),
+    bio:      raw.bio      ?? ml('', ''),
+    email:    raw.email    ?? '',
+    location: raw.location ?? ml('', ''),
+    cvUrl:    raw.cv_url   ?? undefined,
     social: {
-      github:   raw.github ?? '',
+      github:   raw.github   ?? '',
       linkedin: raw.linkedin ?? '',
       codewars: raw.codewars ?? '',
     },
@@ -161,17 +161,28 @@ function adaptPersonal(raw: Record<string, string>): RawPersonal {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function adaptJobs(rows: any[]): RawJob[] {
-  return rows.map(r => ({
-    id:           r.id,
-    role:         r.role,
-    company:      r.company,
-    companyUrl:   r.companyUrl,
-    period:       r.period,
-    type:         r.type,
-    desc:         r.desc,
-    projects:     (Array.isArray(r.projects) ? r.projects : parse(r.projects)).map((p: any) => ml(p.en, p.es)),
-    achievements: (Array.isArray(r.achievements) ? r.achievements : parse(r.achievements)).map((a: any) => ml(a.en, a.es)),
-  }))
+  return rows.map(r => {
+    // achievements: API returns { en: string[], es: string[] } → zip into ML[]
+    const achEn: string[] = r.achievements?.en ?? []
+    const achEs: string[] = r.achievements?.es ?? []
+    const achievements: ML[] = achEn.map((en, i) => ml(en, achEs[i] ?? en))
+
+    // projects: API returns string[] (project IDs / names) → wrap as ML[]
+    const projectNames: string[] = Array.isArray(r.projects) ? r.projects : parse(r.projects)
+    const projects: ML[] = projectNames.map(p => ml(p, p))
+
+    return {
+      id:         r.id,
+      role:       r.role,
+      company:    r.company,
+      companyUrl: r.companyUrl,
+      period:     r.period,
+      type:       r.type,
+      desc:       r.desc,
+      projects,
+      achievements,
+    }
+  })
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -253,7 +264,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
       .then(([personal, softSkillsRaw, skillsRaw, jobsRaw, projectsRaw, eduRaw, certsRaw]) => {
         const loaded: PortfolioRawData = {
           personal:   adaptPersonal(personal),
-          softSkills: softSkillsRaw.map((s: any) => ({ icon: s.icon, name: ml(s.name_en, s.name_es) })),
+          softSkills: softSkillsRaw.map((s: any) => ({ icon: s.icon ?? '✦', name: s.name ?? ml('', '') })),
           skills:     skillsRaw.map((s: any) => ({ id: s.id, name: s.name, iconUrl: s.icon_url, level: s.level, category: s.category })),
           jobs:       adaptJobs(jobsRaw),
           projects:   adaptProjects(projectsRaw),
