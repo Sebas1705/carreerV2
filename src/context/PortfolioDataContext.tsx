@@ -130,7 +130,7 @@ const PortfolioContext = createContext<PortfolioContextValue>({
 const API_BASE = (import.meta.env.VITE_CAREER_API_URL as string | undefined)?.replace(/\/$/, '')
   ?? 'https://career-api.sebas1705.workers.dev'
 
-const CACHE_KEY = 'portfolio_data_v5'
+const CACHE_KEY = 'portfolio_data_v6'
 
 // ── API response → portfolio shape adapters ───────────────────────────────────
 
