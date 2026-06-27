@@ -1,73 +1,115 @@
-# React + TypeScript + Vite
+# carreerV2 - Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio v2 built with **React 19**, **TypeScript**, **Vite**, and **Tailwind CSS v4**. Deployed as a static site on GitHub Pages, consuming live data from the career API. Includes an in-browser **PDF CV generator**.
 
-Currently, two official plugins are available:
+**Live site:** https://sebas1705.github.io/carreerV2/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19 + Vite** - Fast build tooling and modern React
+- **Tailwind CSS v4** - Utility-first styling with zero config
+- **Framer Motion** - Smooth section animations
+- **i18next** - Internationalization with browser language detection
+- **PDF CV generator** - Export your CV as a PDF directly from the browser (react-pdf)
+- **Live API data** - All content loaded from career-api at runtime
+- **CI/CD** - GitHub Actions build + GitHub Pages deploy
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Layer | Technology |
+|---|---|
+| Framework | React 19 |
+| Build tool | Vite 8 |
+| Language | TypeScript 6 |
+| Styling | Tailwind CSS v4 |
+| Animations | Framer Motion |
+| i18n | i18next + react-i18next |
+| PDF export | @react-pdf/renderer |
+| Data source | career-api (Cloudflare Workers + D1) |
+| Hosting | GitHub Pages |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
+```
+carreerV2/
+  public/
+    data/                  # Local JSON fallback data
+      personal.json
+      jobs.json
+      projects.json
+      skills.json
+      soft-skills.json
+      education.json
+    favicon.svg
+    icons.svg
+  src/
+    App.tsx                # Root component, routing
+    assets/                # Static images
+    components/
+      layout/              # Background, Controls, NavDots, SectionDecor
+      sections/            # HeroSection, AboutSection, ExperienceSection,
+                           #   EducationSection, ProjectsSection, SkillsSection,
+                           #   ContactSection
+      ui/                  # Reusable cards and modals (JobCard, ProjectCard ...)
+      CVGenerator.tsx      # PDF CV generator (react-pdf)
+  .github/workflows/
+    deploy.yml             # Build + GitHub Pages deploy
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Quick Start
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Prerequisites: Node.js 20+, npm
+
+```bash
+git clone https://github.com/Sebas1705/carreerV2.git
+cd carreerV2
+npm install
+npm run dev
 ```
+
+### Available Scripts
+
+```bash
+npm run dev      # Dev server with hot reload
+npm run build    # Production build
+npm run preview  # Preview production build locally
+npm run lint     # ESLint
+```
+
+---
+
+## Environment Variables
+
+| Variable | Description | Default |
+|---|---|---|
+| `VITE_CAREER_API_URL` | Base URL for career-api | `https://career-api.sebas1705.workers.dev` |
+| `VITE_BASE_PATH` | GitHub Pages base path | `/carreerV2/` |
+
+Set in `.env` for local development or as CI secrets for production.
+
+---
+
+## CI/CD
+
+Runs on every push to `main`:
+
+1. **build** - `npm ci` + `npm run build` (with `VITE_BASE_PATH=/carreerV2/`)
+2. **deploy** - GitHub Pages
+
+---
+
+## Related Repositories
+
+| Repo | Description |
+|---|---|
+| [career-api](https://github.com/Sebas1705/career-api) | Hono + Cloudflare Workers API powering the data |
+| [carreerV1](https://github.com/Sebas1705/carreerV1) | Portfolio v1 - Astro SSG, Clean Architecture, 10 languages |
+| [career-editor-kmp](https://github.com/Sebas1705/career-editor-kmp) | KMP desktop/Android editor for career-api data |
